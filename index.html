@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Quest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- FIRST-TIME SETUP: shown only when no name is saved -->
+  <div id="welcome-screen" class="overlay hidden">
+    <div class="modal">
+      <h1>Welcome to Study Quest 👋</h1>
+      <p>What should we call you?</p>
+      <input type="text" id="name-input" placeholder="Enter your name" maxlength="30">
+      <button class="btn primary" id="start-btn">Start My Quest</button>
+    </div>
+  </div>
+
+  <!-- NAVIGATION (sidebar on desktop, bottom bar on phones) -->
+  <nav class="nav">
+    <div class="logo">STUDY QUEST</div>
+    <button class="nav-btn active" data-page="dashboard">🏠 <span>Dashboard</span></button>
+    <button class="nav-btn" data-page="tasks">📋 <span>Tasks</span></button>
+    <button class="nav-btn" data-page="progress">📊 <span>Progress</span></button>
+    <button class="nav-btn settings-link" data-page="settings">⚙️ <span>Settings</span></button>
+  </nav>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page">
+      <header class="page-header">
+        <div>
+          <h1 id="greeting">Good day 👋</h1>
+          <p class="muted">Ready to continue your quest?</p>
+        </div>
+        <p class="muted" id="today-date"></p>
+      </header>
+
+      <div class="stats">
+        <div class="card stat"><strong id="stat-completed">0</strong><span>Tasks Completed</span></div>
+        <div class="card stat"><strong id="stat-xp">0 XP</strong><span>Total XP</span></div>
+        <div class="card stat"><strong id="stat-level">Level 1</strong><span>Current Level</span></div>
+        <div class="card stat"><strong id="stat-streak">🔥 0 Days</strong><span>Streak</span></div>
+      </div>
+
+      <div class="card">
+        <div class="row-between"><strong id="xp-level-text">Level 1</strong><span class="muted" id="xp-text">0 / 100 XP</span></div>
+        <div class="bar"><div class="bar-fill" id="xp-bar"></div></div>
+      </div>
+
+      <div class="row-between section-title">
+        <h2>Today's Tasks</h2>
+        <button class="btn primary add-task-btn">+ Add Task</button>
+      </div>
+      <div id="today-list"></div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="page hidden">
+      <header class="page-header">
+        <h1>Tasks</h1>
+        <button class="btn primary add-task-btn">+ Add Task</button>
+      </header>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="today">Today</button>
+        <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
+      <div id="task-list"></div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="progress" class="page hidden">
+      <header class="page-header"><h1>Progress</h1></header>
+      <div class="stats">
+        <div class="card stat"><strong id="p-xp">0</strong><span>Total XP</span></div>
+        <div class="card stat"><strong id="p-level">1</strong><span>Level</span></div>
+        <div class="card stat"><strong id="p-streak">0</strong><span>Current Streak</span></div>
+        <div class="card stat"><strong id="p-longest">0</strong><span>Longest Streak</span></div>
+        <div class="card stat"><strong id="p-total">0</strong><span>Total Tasks</span></div>
+        <div class="card stat"><strong id="p-done">0</strong><span>Completed</span></div>
+        <div class="card stat"><strong id="p-percent">0%</strong><span>Completion</span></div>
+        <div class="card stat"><strong id="p-minutes">0</strong><span>Minutes Studied</span></div>
+      </div>
+      <div class="card">
+        <h2>Next level</h2>
+        <div class="bar"><div class="bar-fill" id="p-xp-bar"></div></div>
+        <p class="muted" id="p-xp-text"></p>
+      </div>
+      <div class="card">
+        <h2>Subject Progress</h2>
+        <div id="subject-progress"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="page hidden">
+      <header class="page-header"><h1>Settings</h1></header>
+      <div class="card">
+        <label for="settings-name">Student name</label>
+        <input type="text" id="settings-name" maxlength="30">
+        <button class="btn primary" id="save-name-btn">Save name</button>
+      </div>
+      <div class="card">
+        <label for="theme-select">Theme</label>
+        <select id="theme-select">
+          <option value="light">Light mode</option>
+          <option value="dark">Dark mode</option>
+        </select>
+      </div>
+      <div class="card">
+        <label>Reset data</label>
+        <p class="muted">Delete all your tasks, XP and progress.</p>
+        <button class="btn danger" id="reset-btn">Reset Data</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ADD TASK FORM (modal) -->
+  <div id="task-modal" class="overlay hidden">
+    <form class="modal" id="task-form">
+      <h2>Add Task</h2>
+      <label for="task-title">Task name</label>
+      <input type="text" id="task-title" placeholder="Study Chapter 4 of AI" required maxlength="80">
+
+      <label for="task-subject">Subject</label>
+      <select id="task-subject">
+        <option>Mathematics</option>
+        <option>Computer Science</option>
+        <option>Programming</option>
+        <option>Artificial Intelligence</option>
+        <option>Databases</option>
+        <option>Physics</option>
+        <option>Chemistry</option>
+        <option>English</option>
+        <option>Other</option>
+      </select>
+
+      <label for="task-priority">Priority</label>
+      <select id="task-priority">
+        <option value="low">Low (+10 XP)</option>
+        <option value="medium" selected>Medium (+20 XP)</option>
+        <option value="high">High (+30 XP)</option>
+      </select>
+
+      <label for="task-date">Due date</label>
+      <input type="date" id="task-date" required>
+
+      <label for="task-minutes">Estimated study time (minutes)</label>
+      <input type="number" id="task-minutes" value="30" min="1" max="600" required>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn" id="cancel-task-btn">Cancel</button>
+        <button type="submit" class="btn primary">Add Task</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- RESET CONFIRMATION (modal) -->
+  <div id="confirm-modal" class="overlay hidden">
+    <div class="modal">
+      <h2>Are you sure?</h2>
+      <p>This will delete all of your tasks, XP and progress.</p>
+      <div class="modal-buttons">
+        <button class="btn" id="cancel-reset-btn">Cancel</button>
+        <button class="btn danger" id="confirm-reset-btn">Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL UP CELEBRATION (modal) -->
+  <div id="levelup-modal" class="overlay hidden">
+    <div class="modal center">
+      <h2>🎉 Level Up!</h2>
+      <p id="levelup-text"></p>
+      <button class="btn primary" id="levelup-close-btn">Keep going</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
